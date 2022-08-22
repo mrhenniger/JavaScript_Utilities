@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="dom.js"></script>
+    <script type="text/javascript" src="tests.js"></script>
+    <script type="text/javascript" src="strings.js"></script>
+
+    <script type="text/javascript">
+        let testRunner = () => {
+            let tests = new Tests();
+            let dom = DomInterface(); // Yes this is the correct way to instantiate this module
+
+            // find
+            // Test 1:  Can find an id
+            let expected = 1;
+            let actual = dom.find('#TestID');
+            tests.add('DomInterface::find', 'Test 1', actual.length === expected, actual);
+
+            // Test 2:  Can find a class
+            expected = 1;
+            actual = dom.find('.test-class');
+            tests.add('DomInterface::find', 'Test 2', actual.length === expected, actual);
+
+            // Test 3:  Can find multiple instances of a class
+            expected = 3;
+            actual = dom.find('.thing');
+            tests.add('DomInterface::find', 'Test 3', actual.length === expected, actual);
+
+            // Test 4:  Can find multiple instances of a class
+            expected = 3;
+            actual = dom.find('.test-class .thing');
+            tests.add('DomInterface::find', 'Test 4', actual.length === expected, actual);
+
+            // first / last
+            // Test 1:  Can find the first of multiple items
+            expected = 'Text for class A';
+            actual = dom.first('.test-class .thing');
+            tests.add('DomInterface::first', 'Test 1', actual.innerHTML() === expected, actual);
+
+            // Test 2:  Can find the last of multiple items
+            expected = 'Text for class C';
+            actual = dom.last('.test-class .thing');
+            tests.add('DomInterface::last', 'Test 2', actual.innerHTML() === expected, actual);
+
+            // classes
+            expected = false;
+            let testID = dom.first('#TestID');
+            actual = testID.hasClass('crap');
+            tests.add('DomInterface::(classes)', 'Test 1', actual === expected, actual);
+            expected = true;
+            testID.addClass('crap');
+            actual = testID.hasClass('crap');
+            tests.add('DomInterface::(classes)', 'Test 2', actual === expected, actual);
+            expected = false;
+            testID.removeClass('crap');
+            actual = testID.hasClass('crap');
+            tests.add('DomInterface::(classes)', 'Test 3', actual === expected, actual);
+
+            // can hide
+            expected = false;
+            testID = dom.first('#TestID');
+            actual = testID.hasClass('hidden');
+            tests.add('DomInterface::hide', 'Test 1', actual === expected, actual);
+            expected = true;
+            testID.hide();
+            actual = testID.hasClass('hidden');
+            tests.add('DomInterface::hide', 'Test 2', actual === expected, actual);
+            expected = false;
+            testID.show();
+            actual = testID.hasClass('hidden');
+            tests.add('DomInterface::hide', 'Test 3', actual === expected, actual);
+
+            // inner html
+            expected = '';
+            actual = dom.first('.grow');
+            tests.add('DomInterface::hide', 'Test 1', actual.innerHTML() === expected, actual);
+            expected = 'middle';
+            actual.innerHTML(expected);
+            tests.add('DomInterface::hide', 'Test 2', actual.innerHTML() === expected, actual);
+            expected = 'left middle';
+            actual.innerHTMLPrepend('left ');
+            tests.add('DomInterface::hide', 'Test 3', actual.innerHTML() === expected, actual);
+            expected = 'left middle right';
+            actual.innerHTMLAppend(' right');
+            tests.add('DomInterface::hide', 'Test 4', actual.innerHTML() === expected, actual);
+            expected = '';
+            actual.innerHTMLWipe();
+            tests.add('DomInterface::hide', 'Test 5', actual.innerHTML() === expected, actual);
+
+
+
+
+
+
+
+
+            tests.dump();
+        };
+    </script>
+</head>
+<body onload="testRunner();">
+    <div id="TestID">
+        <div class="class-one">Text for class one</div>
+        <div class="class-two">Text for class two</div>
+        <div class="class-three">Text for class three</div>
+    </div>
+
+    <div class="test-class">
+        <div class="thing class-a">Text for class A</div>
+        <div class="thing class-b">Text for class B</div>
+        <div class="thing class-c">Text for class C</div>
+    </div>
+
+    <span class="test-span-one">Text for span one</span>
+    <span class="test-span-two">Text for span two</span>
+    <span class="test-span-three">Text for span three</span>
+
+    <div class="grow"></div><br>
+
+    <input type="text"><br>
+
+    <textarea class="my-textarea"></textarea><br>
+
+    <div class="parent">
+        <div class="preexisting">preexisting child</div>
+    </div>
+
+    <div class="inner"> second </div>
+
+    <div class="image-placement-a"></div>
+    <div class="image-placement-b"></div>
+</body>
+</html>
+
+
